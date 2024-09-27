@@ -29,7 +29,7 @@ import analysis_process as anp
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-img", "--input_image", default="./img3/", required = False,
+ap.add_argument("-img", "--input_image", default="./img2/", required = False,
     help = "Path to the directory that contains the imags")
 ap.add_argument("-p", "--persent", default=0.08, required = False,
     help = "Part of images to processing ")
@@ -57,7 +57,8 @@ class NumpyArrayEncoder(JSONEncoder):
 class Hist_analysis(object):
     def __init__(self, logging = logging, verbose = True, demo = True,
         result_image = './res.png', bins = 10, minimal_image_quantity = 5,
-        image_path = args["input_image"], random_part = args["persent"]):
+        image_path = args["input_image"], random_part = args["persent"],
+        mock_mode = True):
 
         self.verbose = verbose
         self.demo = demo
@@ -82,6 +83,8 @@ class Hist_analysis(object):
         self.minim_overlap_front_value = 45
         self.minim_overlap_side_value = 40
 
+        self.mock_mode = mock_mode
+
 
     def __read_files(self):
         return os.listdir(self.image_path)
@@ -100,12 +103,12 @@ class Hist_analysis(object):
             plt.subplot(311)
             plt.title('Blur')
             _, bins = cut(self.blur_levels, bins=self.bins, retbins=True)
-            (mu, sigma) = norm.fit(self.blur_levels)
-            x = np.linspace(min(self.blur_levels), max(self.blur_levels), 100)
+            #(mu, sigma) = norm.fit(self.blur_levels)
+            #x = np.linspace(min(self.blur_levels), max(self.blur_levels), 100)
             values, bins, _ = plt.hist(self.blur_levels, bins)
 
-            area = sum(np.diff(bins) * values)
-            plt.plot(x, mlab.normpdf(x, mu, sigma))
+            #area = sum(np.diff(bins) * values)
+            #plt.plot(x, mlab.normpdf(x, mu, sigma))
                 
             plt.subplot(312)
             plt.title('Overlap front')
@@ -194,6 +197,9 @@ class Hist_analysis(object):
 
 
     def main_process(self):
+        if self.mock_mode:
+            self.random_part = 0.5
+            
         queue = Queue()
         self.file_list = self.__read_files()
         self.file_list = sorted(self.file_list)
