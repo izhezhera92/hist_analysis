@@ -1,0 +1,16 @@
+settings:
+  health_images_edge: 90
+  minim_blur_val: 100
+  minim_overlap_front_value: 40
+  minim_overlap_side_value: 40
+  bins: 5
+  minimal_image_quantity: 5
+  demo: True
+  verbose: True
+  mock_mode: True
+  max_num_keypoints: 256
+  device_type: "cpu"
+  minimal_edge: 25
+  resize_coef: 0.8
+  csv_path: "./csv/"
+  max_num_keypoints: 2000
